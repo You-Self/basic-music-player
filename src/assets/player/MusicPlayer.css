@@ -1,0 +1,14 @@
+.player-container {
+  width: 300px;
+  padding: 16px;
+  border: 1px solid #ccc;
+}
+.player{
+  margin-top: 8px;
+}
+.progress-bar{
+  width: 100%;
+}
+.song-time {
+  font-size: 14px;
+}

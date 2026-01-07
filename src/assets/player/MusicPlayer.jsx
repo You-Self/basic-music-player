@@ -1,0 +1,72 @@
+import { useRef, useState } from "react";
+import "./MusicPlayer.css";
+import "/music/lemonbasement.mp3";
+
+export default function MusicPlayer() {
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleTimeUpdate = () => {
+    setCurrentTime(audioRef.current.currentTime);
+  };
+
+  const handleLoadedMetadata = () => {
+    setDuration(audioRef.current.duration);
+  };
+
+  const handleSeek = (e) => {
+    const time = e.target.value;
+    audioRef.current.currentTime = time;
+    setCurrentTime(time);
+  };
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
+
+  return (
+    <div className="player-container">
+      <audio
+        ref={audioRef}
+        src="/music/lemonbasement.mp3" 
+        onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={handleLoadedMetadata}
+      />
+
+      <button onClick={togglePlay}>
+        {isPlaying ? "Pause" : "Play"}
+      </button>
+
+      <div className="player">
+        <input
+          type="range"
+          min="0"
+          max={duration}
+          value={currentTime}
+          onChange={handleSeek}
+          className="progress-bar"
+        />
+      </div>
+
+      <div className="song-time">
+        {formatTime(currentTime)} / {formatTime(duration)}
+      </div>
+    </div>
+  );
+}
