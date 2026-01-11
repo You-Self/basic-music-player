@@ -40,6 +40,16 @@ export default function MusicPlayer() {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
+  const handlePauseEnd = () => {
+    !isPlaying && currentTime === duration ?
+    audioRef.current.play() :
+    setIsPlaying(false);
+  };
+
+  const handleRepeat = () => {
+    audioRef.current.loop = !audioRef.current.loop;
+  };
+
   return (
     <div className="player-container">
       <audio
@@ -47,10 +57,16 @@ export default function MusicPlayer() {
         src="/music/lemonbasement.mp3" 
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
+        onEnded={handlePauseEnd}
       />
 
       <button onClick={togglePlay}>
-        {isPlaying ? "Pause" : "Play"}
+        {!isPlaying && currentTime === duration ? "Replay" : isPlaying ? "Pause" : "Play"}
+      </button>
+
+      <button onClick={handleRepeat}>
+        🔂 
+        {/* 🔁 */}
       </button>
 
       <div className="player">
