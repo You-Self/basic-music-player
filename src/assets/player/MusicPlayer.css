@@ -1,14 +1,38 @@
 .player-container {
-  width: 300px;
-  padding: 16px;
-  border: 1px solid #ccc;
+  width: 333px;
+  padding: 25px;
+  border: 1px solid #eee;
+  border-radius: 6px;
 }
-.player{
+.player-bar{
   margin-top: 8px;
 }
 .progress-bar{
   width: 100%;
+  margin: 10px 0;
 }
 .song-time {
   font-size: 14px;
 }
+
+.button-controls {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.previous-song {
+  margin-right: 24px;
+  border: #fbf998 solid 1px;
+}
+.play-song{
+  border: #b7ffb6 solid 1px;
+}
+.repeat-song{
+  border: #add8e6 solid 1px;
+}
+.next-song {
+  margin-left: 24px;
+  border: #98fb98 solid 1px;
+}
+

@@ -54,22 +54,45 @@ export default function MusicPlayer() {
     <div className="player-container">
       <audio
         ref={audioRef}
+        // lemonbasement by default cuz it's my fav 
         src="/music/lemonbasement.mp3" 
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handlePauseEnd}
       />
 
-      <button onClick={togglePlay}>
-        {!isPlaying && currentTime === duration ? "Replay" : isPlaying ? "Pause" : "Play"}
-      </button>
+      <div //TODO: song name, author, (optional) album art
+        className="song-info"
+      >
+      </div>
 
-      <button onClick={handleRepeat}>
-        🔂 
-        {/* 🔁 */}
-      </button>
+      <div className="button-controls">
+        <button className="previous-song" onClick={handleRepeat}
+        //TODO: onClick={playPrevious}
+        >
+          ⏮️
+        </button>
 
-      <div className="player">
+        <button className="play-song" onClick={togglePlay}>
+          {!isPlaying && currentTime === duration ? "🔄" : isPlaying ? "⏸️" : "▶️"}
+          {/* replay(play again), pause, play */}
+        </button>
+
+        <button className="repeat-song" onClick={handleRepeat}
+        //TODO: make a popup from button to chose btwn repeat1🔂 or playlist🔁 
+        >
+          🔂 
+        </button>
+
+        <button className="next-song" onClick={handleRepeat}
+        //TODO: onClick={playNext}
+        >
+          ⏭️
+        </button>
+      </div>
+      
+
+      <div className="player-bar">
         <input
           type="range"
           min="0"
