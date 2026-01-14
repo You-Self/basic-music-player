@@ -1,12 +1,43 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import "./MusicPlayer.css";
-import "/music/lemonbasement.mp3";
+
+const songList = [
+  {
+    id: 0,
+    name: "lemonbasement",
+    author: "fumoffumomo",
+    src: "/music/lemonbasement.mp3"
+  },
+  {
+    id: 1,
+    name: "Sunday Summer",
+    author: "Ruruyousei",
+    src: "/music/Sunday Summer.mp3"
+  },
+  {
+    id: 2,
+    name: "Tamachan's rain",
+    author: "fumoffumomo",
+    src: "/music/Tamachan's rain.mp3"
+  },
+];
 
 export default function MusicPlayer() {
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const currentSong = songList[currentSongIndex];
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.load();
+    audio.play();
+  }, [currentSongIndex]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
@@ -18,14 +49,6 @@ export default function MusicPlayer() {
       audio.play();
     }
     setIsPlaying(!isPlaying);
-  };
-
-  const handleTimeUpdate = () => {
-    setCurrentTime(audioRef.current.currentTime);
-  };
-
-  const handleLoadedMetadata = () => {
-    setDuration(audioRef.current.duration);
   };
 
   const handleSeek = (e) => {
@@ -40,36 +63,40 @@ export default function MusicPlayer() {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  const handlePauseEnd = () => {
-    !isPlaying && currentTime === duration ?
-    audioRef.current.play() :
-    setIsPlaying(false);
-  };
-
   const handleRepeat = () => {
     audioRef.current.loop = !audioRef.current.loop;
+  };
+
+  const playPrevious = () => {
+    setCurrentSongIndex((prev) =>
+      prev === 0 ? songList.length - 1 : prev - 1
+    );
+  };
+
+  const playNext = () => {
+    setCurrentSongIndex((prev) =>
+      prev === songList.length - 1 ? 0 : prev + 1
+    );
   };
 
   return (
     <div className="player-container">
       <audio
-        ref={audioRef}
-        // lemonbasement by default cuz it's my fav 
-        src="/music/lemonbasement.mp3" 
-        onTimeUpdate={handleTimeUpdate}
-        onLoadedMetadata={handleLoadedMetadata}
-        onEnded={handlePauseEnd}
+        ref={audioRef} 
+        src={currentSong.src}
+        onTimeUpdate={() => setCurrentTime(audioRef.current.currentTime)}
+        onLoadedMetadata={() => setDuration(audioRef.current.duration)}
+        onEnded={playNext}
       />
 
       <div //TODO: song name, author, (optional) album art
         className="song-info"
+        //TODO: song list (aka playlist) on left side
       >
       </div>
 
       <div className="button-controls">
-        <button className="previous-song" onClick={handleRepeat}
-        //TODO: onClick={playPrevious}
-        >
+        <button className="previous-song" onClick={playPrevious}>
           ⏮️
         </button>
 
@@ -79,14 +106,12 @@ export default function MusicPlayer() {
         </button>
 
         <button className="repeat-song" onClick={handleRepeat}
-        //TODO: make a popup from button to chose btwn repeat1🔂 or playlist🔁 
+        //TODO: make a popup from button to inform that replay1 is active\disabled and highlight button background or border
         >
           🔂 
         </button>
 
-        <button className="next-song" onClick={handleRepeat}
-        //TODO: onClick={playNext}
-        >
+        <button className="next-song" onClick={playNext}>
           ⏭️
         </button>
       </div>
