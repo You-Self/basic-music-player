@@ -27,9 +27,10 @@ export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
-  const currentSong = songList[currentSongIndex];
+  const currentSong = songList[currentSongIndex];  
+  const [toast, setToast] = useState({ visible: false, message: "" });
+  const toastTimeoutRef = useRef(null); 
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -63,8 +64,21 @@ export default function MusicPlayer() {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  const handleRepeat = () => {
-    audioRef.current.loop = !audioRef.current.loop;
+  const handleRepeat = (e) => {
+    const audio = audioRef.current;
+    audio.loop = !audio.loop;
+
+    const repeatButton = e.currentTarget;
+    repeatButton.classList.toggle("active", audio.loop);
+    
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+
+    setToast({ visible: true, message: audio.loop ? "Active!" : "Disabled!" });
+
+    toastTimeoutRef.current = setTimeout(() => {
+      setToast({ visible: false, message: "" });
+      toastTimeoutRef.current = null;
+    }, 1500);
   };
 
   const playPrevious = () => {
@@ -105,11 +119,17 @@ export default function MusicPlayer() {
           {/* replay(play again), pause, play */}
         </button>
 
-        <button className="repeat-song" onClick={handleRepeat}
-        //TODO: make a popup from button to inform that replay1 is active\disabled and highlight button background or border
-        >
-          🔂 
-        </button>
+        <div className="toast-box">
+          <button className="repeat-song" onClick={handleRepeat}>
+            🔂 
+          </button>
+
+          {toast.visible && (
+              <div className={`toast-message ${toast.visible ? "show" : "hide"}`}>
+                {toast.message}
+              </div>
+            )}
+        </div>
 
         <button className="next-song" onClick={playNext}>
           ⏭️
