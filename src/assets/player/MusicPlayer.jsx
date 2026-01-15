@@ -83,17 +83,28 @@ export default function MusicPlayer() {
 
   const playPrevious = () => {
     setCurrentSongIndex((prev) =>
-      prev === 0 ? songList.length - 1 : prev - 1
+      prev === 0 ? songList.length - 1 : prev - 1,
+      setIsPlaying(true)
     );
   };
 
   const playNext = () => {
     setCurrentSongIndex((prev) =>
-      prev === songList.length - 1 ? 0 : prev + 1
+      prev === songList.length - 1 ? 0 : prev + 1,
+      setIsPlaying(true)
     );
   };
 
+      //TODO: song list (aka playlist) on left side
+      //TODO: make volume control slider
+
   return (
+    <>
+    <div className="song-info">
+      <div className="song-name">{currentSong.name}</div>
+      <div className="song-author">{currentSong.author}</div>
+    </div>
+
     <div className="player-container">
       <audio
         ref={audioRef} 
@@ -102,12 +113,6 @@ export default function MusicPlayer() {
         onLoadedMetadata={() => setDuration(audioRef.current.duration)}
         onEnded={playNext}
       />
-
-      <div //TODO: song name, author, (optional) album art
-        className="song-info"
-        //TODO: song list (aka playlist) on left side
-      >
-      </div>
 
       <div className="button-controls">
         <button className="previous-song" onClick={playPrevious}>
@@ -152,5 +157,6 @@ export default function MusicPlayer() {
         {formatTime(currentTime)} / {formatTime(duration)}
       </div>
     </div>
+    </>
   );
 }
