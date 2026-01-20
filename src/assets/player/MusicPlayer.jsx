@@ -31,6 +31,7 @@ export default function MusicPlayer() {
   const currentSong = songList[currentSongIndex];  
   const [toast, setToast] = useState({ visible: false, message: "" });
   const toastTimeoutRef = useRef(null); 
+  const [volume, setVolume] = useState(30);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -95,8 +96,14 @@ export default function MusicPlayer() {
     );
   };
 
-      //TODO: song list (aka playlist) on left side
-      //TODO: make volume control slider
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+    }
+  }, [volume]);
+
+  //TODO: song list (aka playlist) on left side
+  //TODO: clear the code, separate into smaller components
 
   return (
     <>
@@ -155,6 +162,12 @@ export default function MusicPlayer() {
 
       <div className="song-time">
         {formatTime(currentTime)} / {formatTime(duration)}
+      </div>
+
+      <div className="volume-control">
+        <p className="volume-percent">Volume: {volume}%</p>
+        <input className="volume-slider"
+        type="range" min="0" max="100" value={volume} onChange={(e) => setVolume(e.target.value)} />
       </div>
     </div>
     </>

@@ -10,9 +10,31 @@
 .progress-bar{
   width: 100%;
   margin: 10px 0;
+  cursor: pointer;
 }
 .song-time {
   font-size: 14px;
+}
+
+.volume-control {
+  height: 45px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.volume-percent{
+  font-size: 14px;  
+  width: 80px;
+}
+.volume-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  outline: none;
+  cursor: pointer;
 }
 
 .button-controls {
