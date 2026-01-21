@@ -20,6 +20,24 @@ const songList = [
     author: "fumoffumomo",
     src: "/music/Tamachan's rain.mp3"
   },
+  {
+    id: 3,
+    name: "bar theme2",
+    author: "unknown",
+    src: "/music/bar theme2.mp3"
+  },
+  {
+    id: 4,
+    name: "KAAI",
+    author: "unknown",
+    src: "/music/KAAI.mp3"
+  },
+  {
+    id: 5,
+    name: "Mr. Kill Myself",
+    author: "sewerslvt",
+    src: "/music/Mr. Kill Myself.mp3"
+  },
 ];
 
 export default function MusicPlayer() {
@@ -102,11 +120,24 @@ export default function MusicPlayer() {
     }
   }, [volume]);
 
-  //TODO: song list (aka playlist) on left side
-  //TODO: clear the code, separate into smaller components
+  //TODO1: song list (aka playlist) on left side \done
+  //TODO2: add more songs, save current and repeat in local storage \half done
+  //TODO3: clear the code, separate into smaller components \
+  //TODO4: autoupdate song list from a folder
 
   return (
     <>
+    <div className="song-playlist">
+      <h3>Playlist</h3>
+      <ul>
+        {songList.map((song, index) => (
+          <li key={song.id} onClick={() => setCurrentSongIndex(index)}>
+            {song.name} - {song.author}
+          </li>
+        ))}
+      </ul>
+    </div>
+
     <div className="song-info">
       <div className="song-name">{currentSong.name}</div>
       <div className="song-author">{currentSong.author}</div>

@@ -16,6 +16,30 @@
   font-size: 14px;
 }
 
+.song-playlist {
+  position: fixed;
+  left: 20px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  padding: 10px;
+}
+.song-playlist ul {
+  border-top: 1px solid #ccc;
+  max-height: 122px;
+  margin-left: 4px;
+  margin-top: 15px;
+  overflow-y: auto;
+  padding: 1;
+}
+.song-playlist li {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+li:hover {
+  background-color: #8bd7f01b;
+}
+
 .volume-control {
   height: 45px;
   display: flex;
