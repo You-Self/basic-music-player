@@ -1,44 +1,6 @@
 import { useRef, useState, useEffect } from "react";
+import songList from "../song-list/songList";
 import "./MusicPlayer.css";
-
-const songList = [
-  {
-    id: 0,
-    name: "lemonbasement",
-    author: "fumoffumomo",
-    src: "/music/lemonbasement.mp3"
-  },
-  {
-    id: 1,
-    name: "Sunday Summer",
-    author: "Ruruyousei",
-    src: "/music/Sunday Summer.mp3"
-  },
-  {
-    id: 2,
-    name: "Tamachan's rain",
-    author: "fumoffumomo",
-    src: "/music/Tamachan's rain.mp3"
-  },
-  {
-    id: 3,
-    name: "bar theme2",
-    author: "unknown",
-    src: "/music/bar theme2.mp3"
-  },
-  {
-    id: 4,
-    name: "KAAI",
-    author: "unknown",
-    src: "/music/KAAI.mp3"
-  },
-  {
-    id: 5,
-    name: "Mr. Kill Myself",
-    author: "sewerslvt",
-    src: "/music/Mr. Kill Myself.mp3"
-  },
-];
 
 export default function MusicPlayer() {
   const audioRef = useRef(null);
@@ -121,9 +83,10 @@ export default function MusicPlayer() {
   }, [volume]);
 
   //TODO1: song list (aka playlist) on left side \done
-  //TODO2: add more songs, save current and repeat in local storage \half done
-  //TODO3: clear the code, separate into smaller components \
-  //TODO4: autoupdate song list from a folder
+  //TODO2: add more songs \done
+  //TODO3: clear the code, separate into smaller components \done?
+  //TODO4: save current playing and repeat1, current time, volume in local storage \
+  //TODO5: autoupdate song list from a folder, maybe change music source to online links or webms \
 
   return (
     <>
@@ -131,7 +94,7 @@ export default function MusicPlayer() {
       <h3>Playlist</h3>
       <ul>
         {songList.map((song, index) => (
-          <li key={song.id} onClick={() => setCurrentSongIndex(index)}>
+          <li key={song.id} onClick={() => setIsPlaying(true) || setCurrentSongIndex(index)} className={index === currentSongIndex ? "active-song" : ""}>
             {song.name} - {song.author}
           </li>
         ))}
