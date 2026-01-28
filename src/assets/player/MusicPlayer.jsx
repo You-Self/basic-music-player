@@ -7,11 +7,37 @@ export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [currentSongIndex, setCurrentSongIndex] = useState(0);
-  const currentSong = songList[currentSongIndex];  
+
+  const [isLoop, setIsLoop] = useState(() => {
+    const saved = localStorage.getItem("audio.loop");
+    return saved ? JSON.parse(saved) : false;
+  });
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.loop = isLoop;
+    localStorage.setItem("audio.loop", JSON.stringify(isLoop));
+  }, [isLoop]);
   const [toast, setToast] = useState({ visible: false, message: "" });
-  const toastTimeoutRef = useRef(null); 
-  const [volume, setVolume] = useState(30);
+  const toastTimeoutRef = useRef(null);
+
+  const [currentSongIndex, setCurrentSongIndex] = useState(() => {
+    const saved = localStorage.getItem("currentSongIndex");
+    return saved ? JSON.parse(saved) : 0;
+  });
+  useEffect(() => {
+    localStorage.setItem("currentSongIndex", JSON.stringify(currentSongIndex));
+  }, [currentSongIndex]);
+  const currentSong = songList[currentSongIndex];
+
+  const [volume, setVolume] = useState(() => {
+    const saved = localStorage.getItem("volume");
+    return saved ? JSON.parse(saved) : 30;
+  }); 
+  useEffect(() => {
+    localStorage.setItem("volume", JSON.stringify(volume));
+  }, [volume]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -33,7 +59,7 @@ export default function MusicPlayer() {
     setIsPlaying(!isPlaying);
   };
 
-  const handleSeek = (e) => {
+  const handleTimeSeek = (e) => {
     const time = e.target.value;
     audioRef.current.currentTime = time;
     setCurrentTime(time);
@@ -46,15 +72,14 @@ export default function MusicPlayer() {
   };
 
   const handleRepeat = (e) => {
-    const audio = audioRef.current;
-    audio.loop = !audio.loop;
+    setIsLoop(prev => !prev);
 
     const repeatButton = e.currentTarget;
-    repeatButton.classList.toggle("active", audio.loop);
+    repeatButton.classList.toggle("active", !isLoop);
     
     if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
 
-    setToast({ visible: true, message: audio.loop ? "Active!" : "Disabled!" });
+    setToast({ visible: true, message: isLoop ? "Disabled!" : "Active!" });
 
     toastTimeoutRef.current = setTimeout(() => {
       setToast({ visible: false, message: "" });
@@ -84,8 +109,8 @@ export default function MusicPlayer() {
 
   //TODO1: song list (aka playlist) on left side \done
   //TODO2: add more songs \done
-  //TODO3: clear the code, separate into smaller components \done?
-  //TODO4: save current playing and repeat1, current time, volume in local storage \
+  //TODO3: clear the code, separate into smaller components \ongoing
+  // TODO4: save current song index, repeat1, (optional?) current time, volume in local storage \done
   //TODO5: autoupdate song list from a folder, maybe change music source to online links or webms \
 
   return (
@@ -126,7 +151,7 @@ export default function MusicPlayer() {
         </button>
 
         <div className="toast-box">
-          <button className="repeat-song" onClick={handleRepeat}>
+          <button className={`repeat-song ${isLoop ? "active" : ""}`} onClick={handleRepeat}>
             🔂 
           </button>
 
@@ -149,7 +174,7 @@ export default function MusicPlayer() {
           min="0"
           max={duration}
           value={currentTime}
-          onChange={handleSeek}
+          onChange={handleTimeSeek}
           className="progress-bar"
         />
       </div>
