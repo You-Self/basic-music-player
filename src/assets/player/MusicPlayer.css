@@ -39,6 +39,9 @@
 li:hover {
   background-color: #8bd7f01b;
 }
+.active-song {
+  background-color: #8bd7f03d;
+}
 
 .volume-control {
   height: 45px;
